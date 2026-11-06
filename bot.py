@@ -490,6 +490,9 @@ async def succes(interaction:discord.Interaction):
             if done:db.execute("INSERT OR IGNORE INTO achievements VALUES(?,?)",(interaction.user.id,name))
     await respond(interaction,"🏅 **Succès**\n"+"\n".join(("✅" if done else "⬜")+" "+name for name,done in achievements))
 
+from progression import register as register_progression
+register_progression(globals())
+
 @bot.event
 async def on_ready():
     if not getattr(bot,"_synced",False):
