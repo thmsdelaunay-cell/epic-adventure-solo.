@@ -67,3 +67,17 @@ Le fichier `progression.py` ajoute `/hunt`, `/boss`, `/quetes`, `/reclamer_quete
 - `/porter` équipe les nouvelles armes et armures en remplaçant l'ancien objet, sans cumul infini des bonus.
 
 **Note :** les anciennes commandes `/mine`, `/couper`, `/peche` et `/chasse` restent utilisables, mais les objectifs de quête avancés sont comptabilisés avec `/recolter` et `/hunt`. Le bot doit être redémarré après une mise à jour. Cette extension n'a pas encore été validée par des tests d'intégration sur Discord.
+
+## Extension progression niveau 100
+
+- **10 régions** et **80 monstres régionaux** : `/regions`, `/bestiary`, `/chasser_region`, `/statistiques_chasse`
+- **10 nouveaux donjons** : 16 donjons solo au total, avec accès par `/donjons` puis `/entrer_donjon numero`
+- **10 boss supplémentaires** ajoutés au système `/boss`
+- **3 métiers progressifs** (mineur, bûcheron, pêcheur), chacun jusqu'au niveau 100 : `/metiers` et `/exercer`
+- **6 paliers d'équipement** (bronze, argent, or, mithril, adamantite, astral) : `/equipements`, `/fabriquer`, `/porter`
+- **20 nouvelles ressources** pour les crafts et les loots
+- **Progression du personnage plafonnée au niveau 100** : `/niveau_max`
+
+Les anciennes commandes sont conservées. Les nouveaux donjons sont des combats solo par salles, pas une reproduction exacte des donjons d'EPIC RPG. La logique de progression et les probabilités de butin sont une première version à équilibrer lors des tests.
+
+Une vérification automatique Python est configurée dans GitHub Actions ; elle ne remplace pas des tests réels sur un serveur Discord.
