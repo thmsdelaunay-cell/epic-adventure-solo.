@@ -55,3 +55,15 @@ Sur Windows, si `python` n'est pas reconnu, essaie `py`. Sur macOS/Linux, essaie
 ## Limites actuelles
 
 Cette première version est une **base jouable** et non une reproduction exhaustive d'EPIC RPG. Les six donjons sont originaux ; le contenu, les mécaniques et l'équilibrage pourront être étendus. Le bot n'est pas encore déployé sur un hébergement permanent et n'a pas été testé sur un vrai serveur Discord.
+
+## Extension progression (nouvelle version)
+
+Le fichier `progression.py` ajoute `/hunt`, `/boss`, `/quetes`, `/reclamer_quete`, `/recolter`, `/crafts` et `/porter`.
+
+- `/hunt` sélectionne un biome et des monstres selon le niveau ; les ressources ont des probabilités de butin distinctes.
+- `/boss` propose quatre boss avec un délai de 5 minutes et des reliques.
+- `/quetes` affiche six objectifs permanents ; `/reclamer_quete nom` récupère la récompense.
+- `/recolter` permet pêche, bois et minerai avec une chance de butin rare ; `/crafts` affiche les recettes et `/fabriquer` les réalise.
+- `/porter` équipe les nouvelles armes et armures en remplaçant l'ancien objet, sans cumul infini des bonus.
+
+**Note :** les anciennes commandes `/mine`, `/couper`, `/peche` et `/chasse` restent utilisables, mais les objectifs de quête avancés sont comptabilisés avec `/recolter` et `/hunt`. Le bot doit être redémarré après une mise à jour. Cette extension n'a pas encore été validée par des tests d'intégration sur Discord.
