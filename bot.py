@@ -110,7 +110,7 @@ def award(db, uid, xp=0, gold=0):
     lvl=p["level"]
     total=p["xp"]+xp
     gained=0
-    while total>=lvl*75:
+    while lvl<100 and total>=lvl*75:
         total-=lvl*75
         lvl+=1
         gained+=1
@@ -417,7 +417,7 @@ async def donjons(interaction:discord.Interaction):
     await respond(interaction,"🏰 **Donjons**\n"+"\n".join(f"**{i+1}. {d[0]}** · niveau {d[1]}+ · {d[2]} salles" for i,d in enumerate(DUNGEONS))+"\n/entrer_donjon numero")
 
 @bot.tree.command(name="entrer_donjon",description="Entrer dans un donjon en solo")
-async def entrer_donjon(interaction:discord.Interaction,numero:app_commands.Range[int,1,6]):
+async def entrer_donjon(interaction:discord.Interaction,numero:app_commands.Range[int,1,16]):
     if not await authorized(interaction):return
     with connection() as db:
         p=player(db,interaction.user.id)
@@ -490,8 +490,11 @@ async def succes(interaction:discord.Interaction):
             if done:db.execute("INSERT OR IGNORE INTO achievements VALUES(?,?)",(interaction.user.id,name))
     await respond(interaction,"🏅 **Succès**\n"+"\n".join(("✅" if done else "⬜")+" "+name for name,done in achievements))
 
+import progression as progression_extension
 from progression import register as register_progression
 register_progression(globals())
+from expansion import register as register_expansion
+register_expansion(globals())
 
 @bot.event
 async def on_ready():
