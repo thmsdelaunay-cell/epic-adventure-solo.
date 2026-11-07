@@ -11,3 +11,95 @@
 .right-column>.bag-panel{margin-top:0}
 @media(max-width:980px){.right-column{display:block}.primary>.journal-panel .journal{height:460px}}
 @media(max-width:680px){.primary>.journal-panel{padding:22px 18px}.primary>.journal-panel .section-heading h2{font-size:20px}.primary>.journal-panel .journal{height:400px;padding-right:6px}.primary>.journal-panel .journal-entry p{font-size:15px}.primary>.journal-panel .journal-entry{padding-left:16px}}
+/* Desktop cockpit: every panel stays around the journal within the viewport. */
+.right-column>.action-section{margin:0 0 18px;padding:18px;border:1px solid var(--line);border-radius:7px;background:var(--panel)}
+.right-column .actions{grid-template-columns:1fr}
+.right-column .action-card{min-height:72px;padding:12px}
+.right-column .action-card h3{font-size:12px}
+.right-column .action-card p{font-size:11px}
+@media(min-width:1100px) and (min-height:600px){
+ body{height:100dvh;overflow:hidden}
+ .sidebar{width:190px;padding:20px 12px}
+ .brand{font-size:23px;gap:8px;padding:0 6px}
+ .brand-sub{letter-spacing:2px}
+ .nav-label{margin:24px 17px 12px}
+ nav{min-height:0;overflow:auto;gap:3px}
+ nav button{padding:10px 14px}
+ .side-bottom{padding-top:14px}
+ .shell{margin-left:190px;height:100dvh;display:flex;flex-direction:column;min-height:0}
+ header{height:48px;flex-shrink:0;padding:0 24px}
+ main{max-width:none;width:100%;min-height:0;flex:1;display:flex;flex-direction:column;padding:18px 24px 0}
+ .heading{flex-shrink:0;margin-bottom:14px;min-height:52px}
+ .heading h1{font-size:26px}
+ .heading .eyebrow{font-size:8px;margin-bottom:6px}
+ .heading>div>p:last-child{margin-top:4px;font-size:11px}
+ .hud{flex-shrink:0;flex-wrap:nowrap;padding:12px 20px;margin-bottom:16px;gap:22px}
+ .portrait{height:55px;width:48px;font-size:42px}
+ .hero-id h2{font-size:17px;margin:3px 0 6px}
+ .hero-id{min-width:180px}
+ .stat{gap:3px}
+ .stat strong{font-size:19px}
+ .game-layout{flex:1;min-height:0;grid-template-columns:minmax(0,1fr) clamp(320px,27vw,460px);gap:18px}
+ .primary{min-height:0;display:flex;flex-direction:column;gap:14px}
+ .primary>.journal-panel{min-height:0;flex:1;display:flex;flex-direction:column;margin:0;padding:22px 26px}
+ .primary>.journal-panel .section-heading{flex-shrink:0;margin-bottom:18px}
+ .primary>.journal-panel .journal{height:auto;min-height:0;flex:1;overflow:auto;overscroll-behavior:contain}
+ .primary>.journal-panel .section-heading h2{font-size:22px}
+ .primary>.journal-panel .journal-entry p{font-size:16px}
+ .primary>.world{flex:0 0 155px;height:155px;min-height:0}
+ .primary>.world[hidden]{display:none}
+ .world-top{inset:12px 18px auto}
+ .world-top .tag{padding:4px 6px;font-size:7px}
+ .world-copy{left:20px;bottom:17px;right:18px;display:flex;align-items:end;justify-content:space-between;gap:15px}
+ .world-copy .eyebrow,.world-copy>p:not(.eyebrow),.coordinates{display:none}
+ .world-copy h2{font-size:24px;max-width:52%}
+ .world-buttons{flex-wrap:nowrap;gap:8px;flex-shrink:0}
+ .world-buttons button{font-size:10px;padding:10px 12px;white-space:nowrap}
+ .world-buttons .gold span{margin-left:9px}
+ .right-column{display:flex;flex-direction:column;min-height:0;gap:14px}
+ .right-column>.action-section{margin:0;min-height:0;flex:1;display:flex;flex-direction:column;padding:17px}
+ .action-section>.section-heading{flex-shrink:0;gap:8px}
+ .action-section .section-heading h2{font-size:14px}
+ .action-section .search{flex-shrink:0;margin:12px 0}
+ .action-section .search input{padding:9px 0}
+ .right-column .actions{min-height:0;overflow:auto;overscroll-behavior:contain;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start;gap:8px;padding-right:4px;scrollbar-width:thin;scrollbar-color:#40514e transparent}
+ .right-column .action-card{min-height:76px;padding:10px;gap:8px}
+ .right-column .action-card .action-icon{min-width:25px;height:29px;font-size:17px}
+ .right-column .action-card h3{font-size:11px;line-height:1.45;margin-bottom:4px}
+ .right-column .action-card p{font-size:10px;line-height:1.5}
+ .right-column .action-card .arrow{display:none}
+ .right-column>.bag-panel{flex-shrink:0;margin:0;padding:14px 17px}
+ .bag-panel .section-heading h2{font-size:14px}
+ .bag{grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;margin:12px 0 8px}
+ .bag-slot{height:39px;font-size:20px}
+ .right-column>.save-note{display:none}
+ footer{flex-shrink:0;margin-top:10px;padding:9px 0;gap:20px;font-size:7px}
+ footer button{padding:3px 0}
+}
+@media(min-width:1100px) and (max-width:1399px) and (min-height:600px){
+ .primary>.world{flex-basis:135px;height:135px}
+ .world-copy{display:block;bottom:12px}
+ .world-copy h2{font-size:20px;max-width:none;margin-bottom:10px}
+ .world-top>span:last-child{font-size:7px}
+ .world-buttons button{padding:8px 10px}
+ .hud{gap:13px;padding:10px 16px}
+ .hero-id{min-width:155px}
+ .meter-box{min-width:120px}
+}
+@media(min-width:1100px) and (min-height:600px) and (max-height:760px){
+ main{padding-top:12px}
+ .heading{min-height:44px;margin-bottom:10px}
+ .heading h1{font-size:23px}
+ .heading>div>p:last-child{display:none}
+ .hud{margin-bottom:12px}
+ .primary>.world{flex-basis:110px;height:110px}
+ .world-copy{display:flex;align-items:center;bottom:12px}
+ .world-copy h2{font-size:18px;margin:0;max-width:45%}
+ .world-top{inset:8px 14px auto}
+ .world-buttons button{font-size:9px;padding:8px}
+ .primary>.journal-panel{padding:16px 20px}
+ .primary>.journal-panel .section-heading{margin-bottom:12px}
+ .right-column>.bag-panel{padding:10px 14px}
+ .bag{margin:8px 0 4px}
+ .bag-slot{height:31px}
+}
