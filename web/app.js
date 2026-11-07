@@ -4,6 +4,35 @@ const icons = {'Personnage':'♞','Aventure':'⚔','Quêtes':'✧','Métiers':'�
 const labels = {commencer:'Commencer',profil:'Mon personnage',inventaire:'Inventaire',niveau_max:'Progression',succes:'Mes succès',classement:'Classement',aide:'Guide du royaume',hunt:'Chasse sauvage',aventure:'Explorer',chasse:'Chasse classique',quete:'Quête de combat',boss:'Affronter un boss',regions:'Carte des régions',bestiary:'Bestiaire',chasser_region:'Chasse régionale',statistiques_chasse:'Trophées de chasse',quetes:'Quêtes permanentes',reclamer_quete:'Réclamer une quête',quotidien:'Récompense du jour',metiers:'Mes métiers',exercer:'Exercer un métier',recolter:'Récolte avancée',mine:'Miner',couper:'Couper du bois',peche:'Pêcher',travail:'Travailler',crafts:'Livre de recettes',fabriquer:'Fabriquer',equipements:'Paliers d’équipement',equiper:'Amélioration permanente',porter:'Porter un équipement',boutique:'Catalogue du marché',acheter:'Acheter',vendre:'Vendre',chevaux:'Visiter l’écurie',acheter_cheval:'Acheter un cheval',entrainer_cheval:'Entraîner mon cheval',donjons:'Les donjons',entrer_donjon:'Entrer dans un donjon',avancer_donjon:'Salle suivante',quitter_donjon:'Quitter le donjon',utiliser:'Boire une potion',repos:'Se reposer'};
 const titles = {'Aventure':["L'appel de l'aventure","Explore. Combats. Écris ta légende."],'Personnage':['Ta légende prend forme','Retrouve ton héros, sa progression et ses exploits.'],'Quêtes':['Une histoire à accomplir','Relève les défis et récupère tes récompenses.'],'Métiers':['Le savoir des artisans','Récolte les richesses du royaume et perfectionne ton métier.'],'Atelier':['À la forge des légendes','Fabrique ton équipement et prépare les prochains combats.'],'Marché':['Les étals du royaume','Achète tes provisions et échange tes trésors.'],'Écurie':['Un compagnon de route','Trouve ta monture et entraîne-la pour les batailles.'],'Donjons':['Dans les profondeurs','Franchis les salles. Affronte leurs gardiens.'],'Soins':['Une halte bien méritée','Reprends des forces avant de repartir.']};
 let bootstrap, state, category='Aventure', activeCommand, busy=false, toastTimer;
+let autoCursor=0, autoPolling=false;
+labels.auto='Pilote automatique';
+
+function paintAuto(info){
+ $('auto-status').textContent=info.reason+' · Repos : '+info.spent+' / '+info.budget+' or';
+ $('auto-start').disabled=info.active;
+ $('auto-stop').disabled=!info.active;
+ $('auto-minutes').disabled=info.active;
+ $('auto-budget').disabled=info.active;
+ $('auto-status').closest('.auto-panel').classList.toggle('is-active',info.active);
+ for(const event of info.events){if(event.id>autoCursor){log(event.command,event.messages);autoCursor=event.id}}
+}
+async function refreshAuto(){
+ if(!state||autoPolling||!$('login').hidden)return;
+ autoPolling=true;
+ try{paintAuto(await api('auto'))}catch{}finally{autoPolling=false}
+}
+$('auto-start').addEventListener('click',async()=>{
+ if(!state||busy)return;
+ const minutes=$('auto-minutes').valueAsNumber, budget=$('auto-budget').valueAsNumber;
+ if(!Number.isInteger(minutes)||minutes<1||minutes>1440||!Number.isInteger(budget)||budget<0||budget>100000){toast('Choisis une durée de 1 à 1440 minutes et un budget de 0 à 100000 or.');return}
+ $('auto-start').disabled=true;
+ try{paintAuto(await api('auto/start',{minutes,budget}));toast('Programme démarré. Garde la fenêtre du serveur ouverte.')}
+ catch(error){toast(error.message);$('auto-start').disabled=false}
+});
+$('auto-stop').addEventListener('click',async()=>{
+ try{paintAuto(await api('auto/stop',{}));toast('Programme arrêté.')}catch(error){toast(error.message)}
+});
+setInterval(refreshAuto,2000);
 function node(tag, cls, text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e}
 function toast(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,4500)}
 async function api(path,data){

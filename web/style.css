@@ -103,3 +103,4 @@
  .bag{margin:8px 0 4px}
  .bag-slot{height:31px}
 }
+.auto-panel{flex-shrink:0;border:1px solid #4c5948;border-radius:5px;background:#15271f;padding:12px 14px;margin-bottom:18px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}.auto-panel strong{font-size:13px;color:var(--gold)}.auto-panel p{font-size:11px;color:#a9c1b1;margin-top:5px;max-width:460px;line-height:1.5}.auto-controls{display:flex;flex-wrap:wrap;align-items:end;gap:8px}.auto-controls label{font-size:9px;color:var(--muted);display:grid;gap:5px}.auto-controls input{width:85px;background:#0e1c18;border:1px solid #4b5e4f;color:var(--text);border-radius:3px;padding:7px;font:inherit;font-size:12px}.auto-controls button{font-size:10px;padding:10px 12px}.auto-panel.is-active{border-color:#88a472;background:#203224}@media(max-width:680px){.auto-controls{width:100%}.auto-controls input{width:75px}.auto-controls button{padding:9px}}

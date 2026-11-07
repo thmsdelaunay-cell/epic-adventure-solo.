@@ -9,6 +9,30 @@ Bot RPG Discord **solo** en français, inspiré des RPG textuels : progression, 
 
 ## Jouer dans le navigateur sur Windows
 
+### Pilote automatique
+
+Le panneau **Pilote automatique** au-dessus du journal permet de laisser le
+programme gérer les actions. Choisis une durée (1 à 1440 minutes) et un budget
+de repos (150 pièces par défaut), puis clique **Démarrer**.
+Une copie de ta base est créée dans `backups/` avant chaque démarrage.
+
+Le programme utilise une stratégie locale, sans modèle d'IA ni service payant :
+soins avec les potions possédées ou repos à 15 pièces, récompense quotidienne,
+quêtes terminées, équipement déjà possédé, chasse selon le risque estimé,
+récolte et travail pendant les cooldowns. Il respecte les délais existants.
+Le budget limite les pièces dépensées en repos ; les potions et les améliorations
+permanentes possédées peuvent être consommées.
+
+Il ne vend, n'achète et ne fabrique rien ; les boss et donjons restent manuels.
+Une estimation de combat réduit les risques sans garantir chaque victoire.
+Il s'arrête si le héros est KO, en donjon, au niveau 100, sans soins disponibles,
+en cas d'erreur ou à la fin de la durée. **Arrêter** ou une commande manuelle
+reprend le contrôle. Un changement de personnage arrête aussi le programme.
+
+Garde la fenêtre `JOUER_SUR_WINDOWS.bat` ouverte et le PC éveillé.
+Le programme continue côté serveur si tu fermes seulement l'onglet du navigateur.
+Il ne redémarre pas automatiquement après la fermeture du serveur.
+
 L'interface utilise **la même base SQLite et les mêmes actions que Discord**.
 Elle n'a pas besoin de connecter un deuxième bot à Discord. Tu peux garder le bot
 Discord lancé en parallèle. Les gains, l'inventaire et les cooldowns sont partagés.

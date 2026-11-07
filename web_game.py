@@ -13,6 +13,7 @@ from aiohttp import web
 from discord.ext import commands
 
 import bot as game
+from autoplay import Pilot
 from text_commands import parse_arguments
 
 ROOT = Path(__file__).resolve().parent
@@ -116,6 +117,7 @@ def create_app():
     csrf = secrets.token_urlsafe(32)
     sessions = {}
     lock = asyncio.Lock()
+    pilot = Pilot(snapshot, connect, Reply, lock)
     port = 8765
 
     @web.middleware
@@ -152,6 +154,7 @@ def create_app():
         uid = str(data.get("id", ""))
         if uid not in {p["id"] for p in players()}:
             raise web.HTTPForbidden()
+        await pilot.stop("Arrêt : changement de personnage.")
         session = secrets.token_urlsafe(32)
         sessions.clear()  # one local player at a time
         sessions[session] = int(uid)
@@ -180,6 +183,8 @@ def create_app():
                 value = p.default
             words.append(shlex.quote(str(value)))
         values = parse_arguments(command, " ".join(words))
+        if pilot.active:
+            await pilot.stop("Arrêt : tu reprends le contrôle manuellement.")
         async with lock:
             snapshot(uid)  # never let callbacks silently create a missing character
             reply = Reply(uid)
@@ -189,11 +194,38 @@ def create_app():
     async def index(request):
         return web.FileResponse(ROOT / "web" / "index.html")
 
+    async def auto_status(request):
+        uid = selected(request)
+        status = pilot.status()
+        if pilot.uid != uid:
+            status = {"active": False, "reason": "Prêt à démarrer.", "events": [],
+                      "spent": 0, "budget": 0, "ends_at": 0, "player_id": str(uid)}
+        return web.json_response(status)
+
+    async def auto_start(request):
+        uid = selected(request)
+        data = await request.json()
+        pilot.start(uid, data.get("minutes", 60), data.get("budget", 150))
+        return web.json_response(pilot.status())
+
+    async def auto_stop(request):
+        selected(request)
+        await pilot.stop()
+        return web.json_response(pilot.status())
+
+    async def cleanup(app):
+        await pilot.stop("Arrêt du programme.")
+
+    app.on_cleanup.append(cleanup)
+
     app.router.add_get("/", index)
     app.router.add_get("/api/bootstrap", bootstrap)
     app.router.add_post("/api/select", select)
     app.router.add_get("/api/state", state)
     app.router.add_post("/api/action", execute)
+    app.router.add_get("/api/auto", auto_status)
+    app.router.add_post("/api/auto/start", auto_start)
+    app.router.add_post("/api/auto/stop", auto_stop)
     app.router.add_static("/assets/", ROOT / "web")
     return app
 

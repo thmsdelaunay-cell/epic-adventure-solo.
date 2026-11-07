@@ -15,5 +15,5 @@ jobs:
           python-version: '3.11'
       - run: python -m pip install -r requirements.txt "discord.py==${{ matrix.discord-version }}"
       - run: python -m compileall -q bot.py text_commands.py progression.py expansion.py start.py web_game.py start_web.py test_text_commands.py test_web_game.py test_web_http.py
-      - run: python -m unittest test_text_commands test_web_game test_web_http
+      - run: python -m unittest test_text_commands test_web_game test_web_http test_autoplay
       - run: node --check web/app.js

@@ -53,6 +53,26 @@ class WebHttpTests(unittest.IsolatedAsyncioTestCase):
         response = await self.client.get("/assets/../.env", headers=self.headers)
         self.assertEqual(response.status, 404)
 
+    async def test_autoplay_start_stop_and_auth(self):
+        response = await self.client.post("/api/auto/start", headers=self.headers,
+                                           json={"minutes": 1, "budget": 0})
+        self.assertEqual(response.status, 403)
+        response = await self.client.get("/api/bootstrap", headers=self.headers)
+        data = await response.json()
+        self.headers["X-Game-Session"] = data["csrf"]
+        response = await self.client.post("/api/select", headers=self.headers, json={"id": "123"})
+        self.headers["Cookie"] = "rpg_session="+response.cookies["rpg_session"].value
+        response = await self.client.post("/api/auto/start", headers=self.headers,
+                                           json={"minutes": 1, "budget": 0})
+        self.assertEqual(response.status, 200)
+        self.assertTrue((await response.json())["active"])
+        response = await self.client.post("/api/auto/stop", headers=self.headers, json={})
+        self.assertEqual(response.status, 200)
+        self.assertFalse((await response.json())["active"])
+        response = await self.client.post("/api/auto/start", headers=self.headers,
+                                           json={"minutes": -1, "budget": 0})
+        self.assertEqual(response.status, 400)
+
 
 if __name__ == "__main__":
     unittest.main()
