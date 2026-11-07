@@ -38,6 +38,44 @@ Sur Windows, si `python` n'est pas reconnu, essaie `py`. Sur macOS/Linux, essaie
 
 ## Commandes
 
+Toutes les commandes slash, y compris celles des extensions, ont un équivalent
+textuel : remplace le slash par `rpg ` (avec un espace).
+Exemples : `rpg hunt`, `rpg profil`, `rpg inventaire`, `rpg boss`,
+`rpg equiper armure`, `rpg acheter potion 2`, `rpg exercer mineur`,
+`rpg recolter bois`, `rpg reclamer_quete Chasseur novice`.
+Les arguments, restrictions OWNER_ID, sauvegardes et cooldowns sont communs.
+`equiper` garde son amélioration permanente ; `porter` remplace un équipement avancé.
+Les réponses textuelles sont visibles dans le salon ; les refus privés sont envoyés
+en message privé quand Discord l'autorise.
+
+### Activer les messages et mettre à jour sur Windows
+
+1. Dans [Discord Developer Portal](https://discord.com/developers/applications),
+   sélectionne ton application → **Bot** → **Privileged Gateway Intents** →
+   active **Message Content Intent**, puis enregistre. Le code active aussi cet intent.
+2. Arrête le bot avec **Ctrl+C** dans sa fenêtre.
+3. Fais une copie privée de `.env` et `adventure.db` dans un autre dossier.
+   Si DATABASE_PATH pointe ailleurs, sauvegarde cette base à la place.
+4. Sur GitHub, utilise **Code → Download ZIP**, puis extrais dans un dossier temporaire.
+   Copie uniquement `bot.py`, `text_commands.py`, `progression.py`, `expansion.py`,
+   `start.py` et `requirements.txt` dans ton dossier habituel du bot.
+   Ne remplace ni `.env` ni `adventure.db` ; ne recrée pas `.env` depuis l'exemple.
+5. Ouvre PowerShell dans ce dossier habituel et exécute :
+
+   ```powershell
+   py -m pip install -r requirements.txt
+   py start.py
+   ```
+
+   Si tu utilises un environnement virtuel, utilise son Python à la place de `py`.
+6. Attends **Connecté**, puis teste `rpg profil`, `rpg hunt` et `/profil`.
+   Le bot doit pouvoir voir le salon et y envoyer des messages.
+
+Ne partage jamais le contenu de `.env` ou ton token.
+
+Vérifications hors connexion : `python -m compileall -q .` et
+`python -m unittest test_text_commands`. Elles ne lancent aucune connexion Discord.
+
 | Catégorie | Commandes |
 | --- | --- |
 | Personnage | `/commencer`, `/profil`, `/inventaire`, |

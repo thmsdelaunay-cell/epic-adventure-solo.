@@ -16,7 +16,8 @@ DB = os.getenv("DATABASE_PATH", "adventure.db")
 GUILD_ID = os.getenv("GUILD_ID", "")
 OWNER_ID = int(os.getenv("OWNER_ID", "0") or 0)
 intents = discord.Intents.default()
-bot = commands.Bot(command_prefix="!", intents=intents)
+intents.message_content = True
+bot = commands.Bot(command_prefix="rpg ", intents=intents, help_command=None)
 
 MONSTERS = [
     ("Slime", 18, 3, 8, 8), ("Loup", 35, 6, 13, 14),
@@ -156,6 +157,16 @@ def fight(p, monster, boss=False):
     return hp>0, max(0,hp), "\n".join(log), xp*(2 if boss else 1), gold*(2 if boss else 1)
 
 async def respond(interaction, text, private=False):
+    if isinstance(interaction, commands.Context):
+        # Text commands have no ephemeral replies. Restricted replies go to DM.
+        if private:
+            try:
+                await interaction.author.send(text[:1950])
+            except discord.Forbidden:
+                pass
+        else:
+            await interaction.send(text[:1950], allowed_mentions=discord.AllowedMentions.none())
+        return
     await interaction.response.send_message(text[:1950],ephemeral=private)
 
 async def authorized(interaction):
@@ -167,7 +178,7 @@ async def authorized(interaction):
 @bot.tree.command(name="aide",description="Toutes les commandes du RPG")
 async def aide(interaction:discord.Interaction):
     await respond(interaction,"""🏰 **EPIC ADVENTURE SOLO**
-**Personnage :** /commencer /profil /inventaire /classement /soigner
+**Personnage :** /commencer /profil /inventaire /classement /repos
 **Progression :** /aventure /chasse /quete /quotidien /travail
 **Ressources :** /mine /couper /peche
 **Économie :** /boutique /acheter /vendre /fabriquer
@@ -175,6 +186,10 @@ async def aide(interaction:discord.Interaction):
 **Chevaux :** /chevaux /acheter_cheval /entrainer_cheval
 **Donjons solo :** /donjons /entrer_donjon /avancer_donjon /quitter_donjon
 **Divers :** /succes /repos
+**Extensions :** /hunt /boss /quetes /reclamer_quete /recolter /crafts /porter
+**Niveau 100 :** /regions /bestiary /metiers /exercer /equipements /chasser_region /statistiques_chasse /niveau_max
+Toutes ces commandes existent aussi avec le préfixe rpg suivi d'un espace.
+Exemples : rpg hunt · rpg profil · rpg inventaire · rpg boss · rpg equiper armure
 Toutes les données sont sauvegardées automatiquement.""")
 
 @bot.tree.command(name="commencer",description="Créer son personnage")
@@ -495,6 +510,9 @@ from progression import register as register_progression
 register_progression(globals())
 from expansion import register as register_expansion
 register_expansion(globals())
+
+from text_commands import register as register_text_commands
+register_text_commands(bot)
 
 @bot.event
 async def on_ready():
