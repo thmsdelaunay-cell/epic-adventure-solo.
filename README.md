@@ -4,6 +4,47 @@ Bot RPG Discord **solo** en français, inspiré des RPG textuels : progression, 
 
 ## Fonctionnalités
 
+- Interface web locale de jeu : paysage fantasy, statistiques, catégories,
+  actions cliquables, formulaires d'objets et journal d'aventure.
+
+## Jouer dans le navigateur sur Windows
+
+L'interface utilise **la même base SQLite et les mêmes actions que Discord**.
+Elle n'a pas besoin de connecter un deuxième bot à Discord. Tu peux garder le bot
+Discord lancé en parallèle. Les gains, l'inventaire et les cooldowns sont partagés.
+
+1. Arrête le bot avant la mise à jour et fais une copie privée de ta sauvegarde
+   `adventure.db` (ou du fichier indiqué par DATABASE_PATH) et de `.env`.
+2. Copie les fichiers du projet et le dossier `web` **dans ton dossier habituel,
+   celui qui contient ta vraie sauvegarde**. Garde ton `.env` et ta base existants.
+   N'extrais pas la mise à jour pour jouer dans un nouveau dossier vide.
+3. Dans ce dossier, lance `py -m pip install -r requirements.txt`.
+4. Double-clique sur **JOUER_SUR_WINDOWS.bat**, ou exécute `py start_web.py`.
+5. Le navigateur ouvre **http://127.0.0.1:8765**. Si nécessaire, ouvre cette adresse
+   manuellement. Choisis ton personnage existant en vérifiant son identifiant
+   Discord, son niveau et son or, puis clique **Entrer dans le royaume**.
+6. Choisis une catégorie à gauche et une action. Les actions à paramètres ouvrent
+   un formulaire. Le résultat apparaît dans le journal et les statistiques se mettent à jour.
+
+Garde la fenêtre du jeu ouverte ; Ctrl+C l'arrête. Le navigateur ne demande jamais
+ton token Discord. L'interface reste limitée à ton PC ; elle n'est pas un hébergement
+public. OWNER_ID, s'il est renseigné, limite les personnages accessibles.
+
+**Protection des sauvegardes :** le lanceur cherche la base à côté des fichiers du
+jeu (sauf chemin absolu DATABASE_PATH), affiche son chemin, et refuse de créer
+une nouvelle base. Si ta progression n'apparaît pas, ferme le jeu et retrouve
+le bon fichier avant toute action. Les commandes utilisent immédiatement la base
+sélectionnée ; il ne s'agit pas d'une démonstration.
+
+L'interface affiche toutes les commandes enregistrées, y compris les extensions.
+Les actions s'exécutent directement dans le moteur du jeu et leurs résultats
+apparaissent sur le site ; elles ne publient pas de messages dans un salon Discord.
+
+Tests : `python -m unittest test_text_commands test_web_game test_web_http`.
+Ils emploient uniquement des sauvegardes temporaires.
+
+## Fonctionnalités du moteur
+
 - Personnage avec niveau, XP, PV, attaque, défense et or
 - Combats aléatoires, chasse, quêtes, monstres et boss
 - Six donjons progressifs jouables seul, avec salles et récompenses

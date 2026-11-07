@@ -167,7 +167,9 @@ async def respond(interaction, text, private=False):
         else:
             await interaction.send(text[:1950], allowed_mentions=discord.AllowedMentions.none())
         return
-    await interaction.response.send_message(text[:1950],ephemeral=private)
+    await interaction.response.send_message(
+        text if getattr(interaction, "_web_reply", False) else text[:1950],
+        ephemeral=private)
 
 async def authorized(interaction):
     if OWNER_ID and interaction.user.id!=OWNER_ID:
