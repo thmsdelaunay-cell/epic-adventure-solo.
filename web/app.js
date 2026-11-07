@@ -37,8 +37,18 @@ function node(tag, cls, text){const e=document.createElement(tag);if(cls)e.class
 function toast(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,4500)}
 async function api(path,data){
  const options=data===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json','X-Game-Session':bootstrap.csrf},body:JSON.stringify(data)};
- const response=await fetch('/api/'+path,options);
- if(!response.ok){let detail;try{detail=(await response.json()).error}catch{}throw new Error(detail|| (response.status===401?'Choisis à nouveau ton personnage.':'Le jeu ne répond pas. Vérifie que sa fenêtre est ouverte.'))}
+ let response;
+ try{response=await fetch('/api/'+path,options)}catch{throw new Error('Connexion au programme interrompue. Relance JOUER_SUR_WINDOWS.bat.')}
+ if(!response.ok){
+  let detail;try{detail=(await response.json()).error}catch{}
+  const messages={
+   401:'Session expirée. Actualise la page et sélectionne ton personnage.',
+   403:'La page et le programme ne sont plus synchronisés. Fais Ctrl+F5 et sélectionne ton personnage.',
+   404:path.startsWith('auto')?'Le serveur utilise une ancienne version. Copie autoplay.py et web_game.py à côté de start_web.py, arrête le programme avec Ctrl+C, puis relance JOUER_SUR_WINDOWS.bat et fais Ctrl+F5.':'Cette action est indisponible dans la version du programme en cours.',
+   500:'Erreur dans le programme. Consulte les dernières lignes de sa fenêtre PowerShell.'
+  };
+  throw new Error(detail||messages[response.status]||('Erreur du programme (HTTP '+response.status+'). Consulte sa fenêtre PowerShell.'));
+ }
  return response.json();
 }
 function log(command,messages){

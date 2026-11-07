@@ -135,6 +135,8 @@ def create_app():
             return web.json_response({"error": "Paramètres invalides. Vérifie les champs."}, status=400)
         except sqlite3.Error:
             return web.json_response({"error": "Sauvegarde indisponible. Vérifie le dossier du jeu et réessaie."}, status=503)
+        except OSError:
+            return web.json_response({"error": "Impossible d'accéder aux fichiers du jeu ou de créer la copie dans backups. Vérifie que le dossier du jeu est accessible en écriture."}, status=500)
 
     app = web.Application(middlewares=[local_only], client_max_size=8192)
 
